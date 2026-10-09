@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fa">
+  <title>Taskspace — Keep good work moving</title>
+
+  <!-- Google Fonts (DM Sans + Manrope) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <!-- =====================================================
+         SIDEBAR (left panel)
+         ===================================================== -->
+    <aside class="sidebar">
+
+      <!-- Logo -->
+      <a class="logo" href="#">
+        <span class="logo-icon">t</span>
+        <span>taskspace<span class="logo-dot">.</span></span>
+      </a>
+
+      <!-- Workspace switcher -->
+      <div class="workspace-switch">
+        <div class="workspace-avatar">S</div>
+        <div class="workspace-name">
+          <strong>Studio North</strong>
+          <span>Free workspace</span>
+        </div>
+        <span class="chevron">⌄</span>
+      </div>
+
+      <!-- Main links -->
+      <div class="side-label">WORKSPACE</div>
+      <nav class="side-nav">
+        <a class="side-link active" href="#">
+          <span class="side-icon">▦</span> My projects
+        </a>
+        <a class="side-link" href="#my-tasks">
+          <span class="side-icon">☑</span> My tasks
+          <span class="side-count" id="my-task-count">0</span>
+        </a>
+      </nav>
+
+      <!-- Project list (app.js se fill hota hai) -->
+      <div class="side-label projects-label">
+        YOUR PROJECTS
+        <button id="new-project-side" aria-label="Create project">+</button>
+      </div>
+      <nav class="project-nav" id="project-nav"></nav>
+
+      <!-- Sidebar bottom: help card + user -->
+      <div class="sidebar-bottom">
+
+        <div class="help-card">
+          <span class="help-spark">✳</span>
+          <strong>A little help?</strong>
+          <p>Good work happens when the plan is clear.</p>
+          <button id="help-button">Take a quick tour <span>→</span></button>
+        </div>
+
+        <div class="user-menu">
+          <div class="user-avatar" id="user-avatar">?</div>
+          <div class="user-details">
+            <strong id="user-name">Guest</strong>
+            <span id="user-email">Sign in to get started</span>
+          </div>
+          <button id="account-button" class="user-more" aria-label="Account menu">···</button>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- =====================================================
+         MAIN AREA
+         ===================================================== -->
+    <main class="main-area">
+
+      <!-- ----- TOP BAR ----- -->
+      <header class="topbar">
+
+        <!-- Breadcrumb (Workspace / My projects) -->
+        <div class="breadcrumb">
+          <span>Workspace</span>
+          <span class="slash">/</span>
+          <strong id="breadcrumb-current">My projects</strong>
+        </div>
+
+        <!-- Search, notifications, profile -->
+        <div class="top-actions">
+          <button class="icon-btn search-btn" id="search-button" aria-label="Search">⌕</button>
+          <button class="icon-btn notification-btn" id="notification-button" aria-label="Notifications">♧<i></i></button>
+          <span class="top-divider"></span>
+          <button class="profile-chip" id="profile-button">
+            <span class="user-avatar small" id="top-avatar">?</span>
+            <span id="top-name">Guest</span>
+            <span class="chevron">⌄</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- =====================================================
+           VIEW 1: PROJECTS PAGE
+           ===================================================== -->
+      <section class="page-content" id="projects-view">
+
+        <!-- Welcome row: date, heading, new project button -->
+        <div class="welcome-row">
+          <div>
+            <div class="date-line">
+              <span class="date-star">✳</span> <span id="today-label"></span>
+            </div>
+            <h1>Make room for <em>good work.</em></h1>
+            <p class="page-subtitle">A clear space to plan together and make things happen.</p>
+          </div>
+          <button class="primary-button" id="new-project"><span>＋</span> New project</button>
+        </div>
+
+        <!-- Stats cards (3 boxes) -->
+        <div class="stats-row">
+
+          <div class="stat-card">
+            <div class="stat-icon lavender">▦</div>
+            <div>
+              <span class="stat-label">Active projects</span>
+              <strong id="stat-projects">0</strong>
+            </div>
+            <span class="stat-decoration">✳</span>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon mint">☑</div>
+            <div>
+              <span class="stat-label">Tasks in motion</span>
+              <strong id="stat-tasks">0</strong>
+            </div>
+            <span class="stat-decoration">↗</span>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon butter">✓</div>
+            <div>
+              <span class="stat-label">All wrapped up</span>
+              <strong id="stat-done">0</strong>
+            </div>
+            <span class="stat-decoration">✦</span>
+          </div>
+
+        </div>
+
+        <!-- Section title + sort button -->
+        <div class="section-title-row">
+          <div>
+            <h2>Your projects <span class="count-pill" id="project-count">0</span></h2>
+            <p>The good work, all in one place.</p>
+          </div>
+          <button class="filter-button" id="sort-projects">Recently updated <span>⌄</span></button>
+        </div>
+
+        <!-- Project cards (app.js se fill hota hai) -->
+        <div class="project-grid" id="project-grid"></div>
+
+        <!-- Empty state (jab koi project na ho) -->
+        <div class="empty-state" id="empty-projects">
+          <div class="empty-illustration">
+            <div class="empty-sun"></div>
+            <div class="empty-folder">▱<span>✳</span></div>
+            <i>✦</i>
+          </div>
+          <h3>Your next good thing starts here.</h3>
+          <p>Create a project, bring your people together, and see where the work takes you.</p>
+          <button class="primary-button" id="empty-create">＋ Create your first project</button>
+        </div>
+
+      </section>
+
+      <!-- =====================================================
+           VIEW 2: BOARD PAGE (single project, shuru me hidden)
+           ===================================================== -->
+      <section class="page-content board-view hidden" id="board-view">
+
+        <!-- Board heading -->
+        <div class="board-heading">
+
+          <!-- Left: back link, title, description -->
+          <div>
+            <button class="back-link" id="back-projects">← All projects</button>
+
+            <div class="board-title-line">
+              <span class="board-color" id="board-color"></span>
+              <h1 id="board-title">Project name</h1>
+              <button class="board-more" id="project-more" aria-label="Project options">···</button>
+            </div>
+
+            <p class="page-subtitle" id="board-description"></p>
+          </div>
+
+          <!-- Right: members, invite, add task -->
+          <div class="board-actions">
+            <div class="member-stack" id="member-stack"></div>
+            <button class="invite-button" id="invite-member"><span>＋</span> Invite</button>
+            <button class="primary-button" id="add-task">＋ Add task</button>
+          </div>
+        </div>
+
+        <!-- Tabs (Board / List) + tools -->
+        <div class="board-toolbar">
+
+          <div class="view-tabs">
+            <button class="view-tab selected">Board <span>▤</span></button>
+            <button class="view-tab" id="list-view-button">List <span>☷</span></button>
+          </div>
+
+          <div class="board-tools">
+            <button class="filter-button" id="board-search">⌕ &nbsp; Search tasks</button>
+            <button class="filter-button" id="board-sort">⇅ &nbsp; Sort <span>⌄</span></button>
+            <button class="filter-button" id="board-filter">☷ &nbsp; Filter <span>⌄</span></button>
+          </div>
+        </div>
+
+        <!-- Task columns (app.js se fill hota hai) -->
+        <div class="board-columns" id="board-columns"></div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- =====================================================
+       MODAL POPUP (forms + comments, app.js se content aata hai)
+       ===================================================== -->
+  <div class="modal-wrap" id="modal-wrap" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" id="modal-close" aria-label="Close">×</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- TOAST MESSAGE (neeche chhota notification) -->
+  <div class="toast" id="toast" role="status"></div>
+
+  <!-- JAVASCRIPT -->
+  <script src="/app.js"></script>
+</body>
+
+</html>

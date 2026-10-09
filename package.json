@@ -1,0 +1,8 @@
+{
+  "name": "simple-project-board",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A basic project and task board built with Express and SQLite.",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "bcryptjs": "^2.4.3", "express": "^4.21.2", "express-session": "^1.18.1", "sqlite3": "^5.1.7" }
+}

@@ -1,0 +1,894 @@
+/* =====================================================
+   1. VARIABLES (colors + fonts)
+   ===================================================== */
+:root {
+  --ink: #252b38;     /* main text */
+  --muted: #858b98;   /* soft grey text */
+  --line: #eceef2;    /* borders */
+  --paper: #f7f8fa;   /* page background */
+  --white: #fff;
+  --purple: #7566d8;  /* main accent */
+
+  --sans: 'DM Sans', sans-serif;
+  --display: 'Manrope', 'DM Sans', sans-serif;
+}
+
+/* =====================================================
+   2. RESET / BASE STYLES
+   ===================================================== */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;                  /* was 13px */
+  -webkit-font-smoothing: antialiased;
+}
+
+button, a { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { text-decoration: none; }
+
+.app-shell { min-height: 100vh; }
+
+.hidden { display: none !important; }  /* JS se show/hide ke liye */
+body.locked { overflow: hidden; }      /* modal khula ho to scroll band */
+
+/* =====================================================
+   3. SIDEBAR (left panel)
+   ===================================================== */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 250px;                     /* was 239px (bade text ke liye) */
+  background: #fff;
+  border-right: 1px solid var(--line);
+  padding: 24px 15px;
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+}
+
+/* ---------- Logo ---------- */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 9px;
+  font: 800 18px var(--display);    /* was 17px */
+  letter-spacing: -.07em;
+}
+
+.logo-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: #786bd9;
+  color: white;
+  display: grid;
+  place-items: center;
+  font: 700 italic 18px var(--serif, Georgia);
+  letter-spacing: 0;
+  box-shadow: 0 4px 9px #786bd944;
+}
+
+.logo-dot { color: #897de5; }
+
+/* ---------- Workspace switcher ---------- */
+.workspace-switch {
+  margin: 29px 0 25px;
+  padding: 10px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.workspace-avatar {
+  height: 30px;
+  width: 30px;
+  background: #f4d7c3;
+  color: #a75d3d;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  font: 700 14px var(--display);    /* was 13px */
+}
+
+.workspace-name { display: grid; gap: 3px; flex: 1; }
+.workspace-name strong { font-size: 12px; }                 /* was 10px */
+.workspace-name span { font-size: 11px; color: #989daa; }   /* was 9px */
+
+.chevron { font-size: 15px; color: #9297a2; }
+
+/* ---------- Sidebar labels + links ---------- */
+.side-label {
+  color: #a1a5af;
+  font-size: 10px;                  /* was 8px */
+  letter-spacing: .12em;
+  font-weight: 700;
+  padding: 0 10px;
+  margin-bottom: 8px;
+}
+
+.side-nav,
+.project-nav { display: grid; gap: 3px; }
+
+.side-link,
+.project-link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px;
+  border-radius: 6px;
+  color: #7a808d;
+  font-size: 13px;                  /* was 11px */
+}
+
+.side-link.active {
+  background: #f2f0fe;
+  color: #6659c8;
+  font-weight: 600;
+}
+
+.side-icon { font-size: 15px; width: 16px; text-align: center; }
+
+/* Task count badge */
+.side-count {
+  margin-left: auto;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 11px;                  /* was 9px */
+  color: #7c8290;
+}
+
+/* ---------- "Your projects" label + plus button ---------- */
+.projects-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 29px;
+}
+
+.projects-label button {
+  border: 0;
+  background: none;
+  color: #8d91a0;
+  font-size: 19px;
+}
+
+.project-link { padding: 8px 10px; cursor: pointer; }
+
+.project-link:hover,
+.side-link:hover { background: #f7f7fb; }
+
+.project-color { width: 8px; height: 8px; border-radius: 3px; background: #8e7ce4; }
+
+/* ---------- Sidebar bottom (help card + user) ---------- */
+.sidebar-bottom { margin-top: auto; }
+
+.help-card {
+  border-radius: 8px;
+  background: #f4f2ff;
+  padding: 14px 13px;
+  margin-bottom: 17px;
+  position: relative;
+  overflow: hidden;
+}
+
+.help-spark { position: absolute; right: 14px; top: 10px; color: #ada4f1; font-size: 21px; }
+.help-card strong { font-size: 12px; }                      /* was 10px */
+
+.help-card p {
+  font-size: 11px;                  /* was 9px */
+  color: #7d8191;
+  line-height: 1.6;
+  max-width: 160px;
+  margin: 7px 0 10px;
+}
+
+.help-card button {
+  border: 0;
+  background: none;
+  color: #6659c8;
+  font-size: 11px;                  /* was 9px */
+  font-weight: 600;
+  padding: 0;
+}
+
+.help-card button span { margin-left: 14px; }
+
+.user-menu {
+  border-top: 1px solid var(--line);
+  padding: 14px 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.user-avatar {
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #dce7fa;
+  color: #586e9d;
+  font-size: 12px;                  /* was 10px */
+  font-weight: 700;
+}
+
+.user-details { display: grid; gap: 3px; flex: 1; min-width: 0; }
+.user-details strong { font-size: 12px; }                   /* was 10px */
+
+.user-details span {
+  font-size: 10px;                  /* was 8px */
+  color: #969ba6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-more { border: 0; background: none; font-size: 17px; color: #9297a2; }
+
+/* =====================================================
+   4. MAIN AREA + TOPBAR
+   ===================================================== */
+.main-area { margin-left: 250px; min-height: 100vh; }   /* sidebar width ke barabar */
+
+.topbar {
+  height: 62px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4.2%;
+}
+
+.breadcrumb {
+  font-size: 12px;                  /* was 10px */
+  color: #989daa;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.breadcrumb strong { font-weight: 600; color: #454b59; }
+.slash { color: #c7cad1; }
+
+.top-actions { display: flex; align-items: center; gap: 16px; }
+
+.icon-btn {
+  border: 0;
+  background: none;
+  color: #79808e;
+  font-size: 18px;
+  position: relative;
+  padding: 4px;
+}
+
+/* Notification red dot */
+.notification-btn i {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: #ee8e79;
+  border: 1px solid white;
+  border-radius: 50%;
+  right: 3px;
+  top: 4px;
+}
+
+.top-divider { height: 23px; border-left: 1px solid var(--line); margin: 0 1px; }
+
+.profile-chip {
+  border: 0;
+  background: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;                  /* was 10px */
+}
+
+.user-avatar.small { width: 25px; height: 25px; font-size: 11px; }  /* was 9px */
+
+/* =====================================================
+   5. PROJECTS PAGE
+   ===================================================== */
+.page-content {
+  padding: 35px 4.2% 60px;
+  max-width: 1600px;
+  margin: auto;
+}
+
+/* ---------- Welcome row (date + heading + button) ---------- */
+.welcome-row { display: flex; align-items: center; justify-content: space-between; }
+
+.date-line {
+  color: #878d9a;
+  font-size: 11px;                  /* was 9px */
+  letter-spacing: .035em;
+  margin-bottom: 13px;
+}
+
+.date-star { color: #8c7be5; margin-right: 5px; }
+
+.welcome-row h1,
+.board-heading h1 {
+  font: 600 32px / 1.2 var(--display);  /* was 31px */
+  letter-spacing: -.06em;
+  margin: 0;
+}
+
+.welcome-row h1 em { font-family: Georgia, serif; font-weight: 400; }
+
+.page-subtitle { color: #9095a0; font-size: 12px; margin: 8px 0 0; }  /* was 10px */
+
+/* ---------- Main purple button ---------- */
+.primary-button {
+  height: 38px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 5px;
+  background: #7567d5;
+  color: #fff;
+  font-size: 12px;                  /* was 10px */
+  font-weight: 600;
+  box-shadow: 0 4px 10px #7567d52b;
+  transition: transform .15s, background .15s;
+}
+
+.primary-button:hover { background: #6659c8; transform: translateY(-1px); }
+.primary-button span { font-size: 16px; vertical-align: -1px; margin-right: 4px; }
+
+/* ---------- Stats cards (3 boxes) ---------- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 13px;
+  margin: 28px 0 37px;
+}
+
+.stat-card {
+  height: 84px;
+  background: #fff;
+  border: 1px solid #eef0f3;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+}
+
+/* Icon background colors */
+.lavender { background: #f0edff; color: #8172db; }
+.mint     { background: #e5f5ef; color: #5caa86; }
+.butter   { background: #fff3da; color: #d69e39; }
+
+.stat-card > div:nth-child(2) { display: grid; gap: 5px; }
+.stat-label { color: #969ba6; font-size: 11px; }                              /* was 9px */
+.stat-card strong { font: 700 20px var(--display); letter-spacing: -.04em; }  /* was 19px */
+.stat-decoration { position: absolute; right: 15px; top: 10px; color: #d2cffa; font-size: 14px; }
+
+/* ---------- "Your projects" title row ---------- */
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.section-title-row h2 {
+  font: 700 16px var(--display);    /* was 14px */
+  margin: 0;
+  letter-spacing: -.025em;
+}
+
+.count-pill {
+  display: inline-grid;
+  place-items: center;
+  background: #ebe9fa;
+  color: #7065c9;
+  border-radius: 10px;
+  padding: 2px 7px;
+  font: 600 10px var(--sans);       /* was 8px */
+  vertical-align: 2px;
+  margin-left: 5px;
+}
+
+.section-title-row p { font-size: 11px; color: #989daa; margin: 5px 0 0; }   /* was 9px */
+
+.filter-button {
+  height: 32px;
+  padding: 0 11px;
+  background: #fff;
+  border: 1px solid #e8eaf0;
+  border-radius: 5px;
+  color: #7f8592;
+  font-size: 11px;                  /* was 9px */
+}
+
+.filter-button span { margin-left: 11px; }
+
+/* ---------- Project cards grid ---------- */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.project-card {
+  background: #fff;
+  border: 1px solid #eceef2;
+  border-radius: 7px;
+  padding: 14px;
+  min-height: 156px;                /* was 146px */
+  cursor: pointer;
+  transition: box-shadow .18s, transform .18s;
+}
+
+.project-card:hover { transform: translateY(-2px); box-shadow: 0 8px 23px #2931470d; }
+
+.project-card-top { display: flex; align-items: center; justify-content: space-between; }
+
+.project-mark {
+  width: 29px;
+  height: 29px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+}
+
+.project-dots { border: 0; background: none; color: #9297a2; font-size: 16px; }
+
+.project-card h3 { font: 700 13px var(--display); margin: 12px 0 5px; }   /* was 11px */
+
+/* Description: max 2 lines */
+.project-card > p {
+  font-size: 11px;                  /* was 9px */
+  color: #9297a2;
+  margin: 0;
+  line-height: 1.5;
+  height: 33px;
+  overflow: hidden;
+}
+
+.project-progress-row {
+  display: flex;
+  justify-content: space-between;
+  color: #969ba6;
+  font-size: 10px;                  /* was 8px */
+  margin-top: 15px;
+}
+
+.progress-track { height: 4px; background: #f0f0f4; border-radius: 4px; margin-top: 6px; overflow: hidden; }
+.progress-fill { height: 100%; background: #8c7de2; border-radius: 4px; }
+
+.project-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 11px; }
+
+/* Small member avatars */
+.tiny-avatars { display: flex; }
+
+.tiny-avatar {
+  width: 20px;
+  height: 20px;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 9px;                   /* was 7px */
+  margin-right: -5px;
+  background: #e0e8fa;
+  color: #637297;
+}
+
+.tiny-avatar:nth-child(2) { background: #f5dfd3; color: #a46852; }
+.tiny-avatar:nth-child(3) { background: #e1f0e8; color: #5c8a70; }
+
+.task-total { color: #969ba6; font-size: 10px; }   /* was 8px */
+
+/* ---------- Empty state (jab koi project na ho) ---------- */
+.empty-state { display: none; text-align: center; padding: 53px 20px 25px; }
+.empty-state.visible { display: block; }
+
+.empty-illustration {
+  height: 133px;
+  width: 175px;
+  margin: 0 auto 10px;
+  position: relative;
+  background: #f0effb;
+  border-radius: 90px 90px 7px 7px;
+  display: grid;
+  place-items: center;
+}
+
+.empty-sun { position: absolute; width: 57px; height: 57px; background: #f8d991; border-radius: 50%; top: 21px; right: 30px; }
+
+.empty-folder { z-index: 1; position: relative; color: #7a6fce; font-size: 73px; transform: rotate(-9deg); }
+.empty-folder span { position: absolute; font-size: 20px; color: #7e74cf; right: 3px; top: 22px; }
+
+.empty-illustration i { position: absolute; left: 26px; top: 31px; color: #8e83dc; font-style: normal; }
+
+.empty-state h3 { font: 700 17px var(--display); margin: 14px 0 7px; }   /* was 15px */
+
+.empty-state p {
+  color: #9297a2;
+  font-size: 12px;                  /* was 10px */
+  max-width: 330px;
+  line-height: 1.7;
+  margin: 0 auto 17px;
+}
+
+/* =====================================================
+   6. BOARD VIEW (single project ka page)
+   ===================================================== */
+.board-view { padding-top: 24px; }
+
+.back-link {
+  border: 0;
+  background: none;
+  color: #8376d4;
+  font-size: 11px;                  /* was 9px */
+  padding: 0;
+  margin-bottom: 19px;
+}
+
+.board-heading { display: flex; align-items: center; justify-content: space-between; }
+.board-heading h1 { font-size: 26px; }                      /* was 25px */
+
+.board-title-line { display: flex; align-items: center; gap: 9px; }
+.board-color { width: 12px; height: 12px; border-radius: 4px; background: #8e7ce4; }
+.board-more { border: 0; background: none; font-size: 17px; color: #969ba6; }
+.board-heading .page-subtitle { margin-left: 21px; }
+
+/* Right side: members + invite + add task */
+.board-actions { display: flex; align-items: center; gap: 8px; }
+
+.member-stack { display: flex; margin-right: 3px; }
+.member-stack .tiny-avatar { width: 25px; height: 25px; font-size: 10px; }   /* was 8px */
+
+.invite-button {
+  height: 32px;
+  border: 1px solid #e7e8ef;
+  background: white;
+  border-radius: 5px;
+  padding: 0 10px;
+  font-size: 11px;                  /* was 9px */
+  color: #666d7d;
+}
+
+.invite-button span { font-size: 14px; color: #7d6ed4; }
+
+/* ---------- Tabs (Board / List) + tools ---------- */
+.board-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e9ebf0;
+  margin-top: 28px;
+}
+
+.view-tabs { display: flex; gap: 17px; }
+
+.view-tab {
+  border: 0;
+  background: none;
+  padding: 0 2px 12px;
+  color: #9297a2;
+  font-size: 11px;                  /* was 9px */
+}
+
+.view-tab span { margin-left: 5px; }
+
+.view-tab.selected {
+  color: #7163cb;
+  border-bottom: 2px solid #796bd5;
+  font-weight: 600;
+}
+
+.board-tools { display: flex; gap: 7px; padding-bottom: 9px; }
+.board-tools .filter-button { height: 30px; }
+
+/* ---------- Columns (To do / In progress / Done) ---------- */
+.board-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));   /* min was 210px */
+  gap: 14px;
+  padding-top: 19px;
+  overflow: auto;
+}
+
+.board-column { min-width: 0; }
+
+.column-heading { display: flex; align-items: center; gap: 7px; margin-bottom: 11px; }
+.column-dot { height: 8px; width: 8px; border-radius: 50%; background: #a6a0df; }
+.column-heading h3 { font: 700 12px var(--display); margin: 0; }           /* was 10px */
+
+.column-count {
+  font-size: 10px;                  /* was 8px */
+  color: #969ba6;
+  background: #eceef2;
+  border-radius: 9px;
+  padding: 2px 6px;
+}
+
+.column-add { margin-left: auto; border: 0; background: none; color: #969ba6; font-size: 15px; }
+
+/* ---------- Task cards ---------- */
+.task-list { display: grid; gap: 9px; }
+
+.task-card {
+  border: 1px solid #eceef2;
+  border-radius: 6px;
+  background: #fff;
+  padding: 12px;
+  box-shadow: 0 2px 5px #222a3905;
+}
+
+.task-card-top { display: flex; align-items: center; justify-content: space-between; }
+
+/* Priority badge */
+.priority {
+  font-size: 9px;                   /* was 7px */
+  padding: 4px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.priority.high   { color: #c96f68; background: #fff0ee; }
+.priority.medium { color: #b68c46; background: #fff7e5; }
+.priority.low    { color: #5c9b7c; background: #eaf7ef; }
+
+.task-menu { border: 0; background: none; color: #9da1aa; font-size: 14px; padding: 0; }
+
+.task-card h4 { font: 600 12px / 1.5 var(--display); margin: 9px 0 5px; }   /* was 10px */
+
+.task-card p {
+  font-size: 10px;                  /* was 8px */
+  line-height: 1.55;
+  color: #969ba6;
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.task-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #f0f1f4;
+  margin-top: 10px;
+  padding-top: 9px;
+}
+
+.task-assignee { font-size: 10px; color: #858b98; display: flex; align-items: center; gap: 5px; }  /* was 8px */
+.task-assignee .tiny-avatar { margin: 0; width: 18px; height: 18px; }
+
+/* Status dropdown */
+.task-card-bottom select {
+  border: 1px solid #eceef2;
+  background: white;
+  color: #858b98;
+  font-size: 10px;                  /* was 8px */
+  border-radius: 3px;
+  padding: 4px;
+}
+
+.comment-button { border: 0; background: none; color: #969ba6; font-size: 10px; padding: 0; }  /* was 8px */
+.comment-button:hover { color: #6d5fc9; }
+
+/* =====================================================
+   7. MODAL POPUP (forms + comments)
+   ===================================================== */
+.modal-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: #20263870;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+
+.modal-wrap.open { opacity: 1; pointer-events: auto; }
+
+.modal {
+  width: min(450px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 9px;
+  padding: 28px;
+  position: relative;
+  box-shadow: 0 20px 60px #2026382e;
+}
+
+.modal-close { position: absolute; right: 14px; top: 10px; border: 0; background: none; color: #858b98; font-size: 23px; }
+
+.modal .eyebrow { font-size: 10px; letter-spacing: .12em; color: #8072d5; margin: 0 0 7px; }  /* was 8px */
+.modal h2 { font: 700 21px var(--display); letter-spacing: -.04em; margin: 0 0 7px; }         /* was 20px */
+.modal-intro { font-size: 12px; color: #9095a0; line-height: 1.6; margin: 0 0 19px; }         /* was 10px */
+
+/* ---------- Form fields ---------- */
+.field { margin: 0 0 13px; }
+.field label { display: block; font-weight: 600; font-size: 11px; margin-bottom: 6px; }       /* was 9px */
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  border: 1px solid #e5e7ed;
+  background: #fff;
+  border-radius: 4px;
+  min-height: 39px;
+  padding: 8px 10px;
+  font: 12px var(--sans);           /* was 10px */
+  color: var(--ink);
+}
+
+.field textarea { height: 72px; resize: vertical; }
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus { outline: 1px solid #8c7ee1; border-color: #8c7ee1; }
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.form-error { font-size: 11px; color: #bd625c; min-height: 14px; margin: 0 0 8px; }   /* was 9px */
+.modal-submit { width: 100%; height: 40px; }
+
+.form-switch { text-align: center; font-size: 11px; color: #858b98; margin: 14px 0 0; }  /* was 9px */
+.form-switch button { border: 0; background: none; color: #7163cb; text-decoration: underline; font-weight: 600; }
+
+/* ---------- Comments ---------- */
+.comment-list { max-height: 230px; overflow: auto; display: grid; gap: 11px; margin-bottom: 17px; }
+.comment { background: #f8f8fb; padding: 9px 11px; border-radius: 5px; }
+.comment strong { font-size: 11px; }                                     /* was 9px */
+.comment time { float: right; color: #a1a5af; font-size: 10px; }         /* was 8px */
+
+.comment p {
+  font-size: 11px;                  /* was 9px */
+  line-height: 1.55;
+  margin: 6px 0 0;
+  color: #666d79;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   8. TOAST (neeche chhota notification)
+   ===================================================== */
+.toast {
+  position: fixed;
+  z-index: 30;
+  bottom: 22px;
+  left: 50%;
+  transform: translate(-50%, 12px);
+  opacity: 0;
+  background: #293044;
+  color: white;
+  padding: 11px 16px;
+  border-radius: 5px;
+  font-size: 12px;                  /* was 10px */
+  transition: .2s;
+  pointer-events: none;
+  max-width: 90%;
+  text-align: center;
+}
+
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* =====================================================
+   9. RESPONSIVE — SMALL LAPTOP / TABLET (max 1100px)
+   ===================================================== */
+@media (max-width: 1100px) {
+  .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .board-columns { grid-template-columns: repeat(3, 250px); }   /* was 240px */
+  .page-content { padding-left: 3%; padding-right: 3%; }
+}
+
+/* =====================================================
+   10. RESPONSIVE — TABLET / BIG PHONE (max 750px)
+   Sidebar sirf icons dikhata hai (text font-size:0 se hidden)
+   ===================================================== */
+@media (max-width: 750px) {
+  .sidebar { width: 62px; padding: 19px 9px; }
+
+  .logo { padding: 0; justify-content: center; }
+
+  /* Text hide karne ke liye font-size 0 */
+  .logo > span:nth-child(2),
+  .workspace-name,
+  .workspace-switch > .chevron,
+  .side-label,
+  .side-link:not(.active),
+  .side-link.active { font-size: 0; }
+
+  .workspace-switch { padding: 6px; margin: 24px 0 16px; justify-content: center; }
+  .workspace-avatar { width: 30px; flex: none; }
+
+  .side-nav { gap: 8px; }
+  .side-link { justify-content: center; padding: 11px 0; }
+  .side-icon { font-size: 16px; }
+
+  /* Ye cheezein mobile pe poori hide */
+  .side-count,
+  .project-nav,
+  .sidebar-bottom .help-card,
+  .user-details,
+  .user-more { display: none; }
+
+  .sidebar-bottom { display: flex; justify-content: center; }
+  .user-menu { border: 0; padding: 0; }
+
+  .main-area { margin-left: 62px; }
+  .topbar { padding: 0 4%; }
+  .page-content { padding-top: 27px; }
+
+  .welcome-row h1 { font-size: 26px; }   /* was 25px */
+
+  .stats-row { gap: 7px; }
+  .stat-card { padding: 10px; gap: 7px; }
+  .stat-icon { width: 28px; height: 28px; }
+  .stat-label { font-size: 10px; }       /* was 8px */
+  .stat-card strong { font-size: 17px; } /* was 16px */
+  .stat-decoration { display: none; }
+
+  .board-heading { align-items: flex-start; gap: 10px; flex-direction: column; }
+  .board-actions { align-self: flex-end; }
+  .board-toolbar { margin-top: 20px; }
+
+  /* Board tools: sirf pehla button ka text dikhega */
+  .board-tools .filter-button { font-size: 0; }
+  .board-tools .filter-button:first-child { font-size: 11px; }   /* was 9px */
+  .board-tools .filter-button span { display: none; }
+}
+
+/* =====================================================
+   11. RESPONSIVE — PHONE (max 520px)
+   ===================================================== */
+@media (max-width: 520px) {
+  .project-grid { grid-template-columns: 1fr; }
+
+  .welcome-row { align-items: flex-start; gap: 12px; flex-direction: column; }
+  .welcome-row .primary-button { align-self: flex-end; margin-top: -4px; }
+
+  .stats-row { grid-template-columns: 1fr; gap: 7px; margin: 19px 0 27px; }
+  .stat-card { height: 60px; }
+
+  .section-title-row { align-items: flex-end; }
+
+  .board-columns { grid-template-columns: repeat(3, 245px); }   /* was 235px */
+
+  /* Phone pe top bar me naam hide */
+  .profile-chip #top-name,
+  .profile-chip .chevron { display: none; }
+
+  .top-actions { gap: 10px; }
+  .field-row { grid-template-columns: 1fr; }
+  .modal { padding: 25px 20px; }
+  .board-heading h1 { font-size: 23px; }   /* was 22px */
+}
